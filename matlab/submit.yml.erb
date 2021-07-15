@@ -3,7 +3,8 @@
   #gpu = num_gpus.blank? ? 1 : num_gpus.to_i
   walltime = (bc_num_hours.to_i * 60)
   
-  qos_name = "normal"
+  qos_name = qos_name.blank? ? "normal" : qos_name
+  #qos_name = "normal"
  
 #  if slurm_partition.include?("gpu")
  #    node_type = "GPU"
@@ -18,7 +19,7 @@
      slurm_args = [ "--nodes", "#{num_cpu}","--ntasks", "#{ppn}", "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:titan:1", "--nodelist", "n0026.abc0"]
   
   when "CPU"
-     slurm_args = [ "--nodes", "#{num_cpu}", "--partition", "#{slurm_partition}", "--time", "#{walltime}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}" ]
+     slurm_args = [ "--nodes", "#{num_cpu}", "--partition", "#{slurm_partition}", "--time", "#{walltime}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--exclude", "n0024.abc0,n0025.abc0,n0026.abc0,n0027.abc0" ]
     
   end
 %>

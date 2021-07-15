@@ -1,0 +1,33 @@
+<%-
+#  ppn = num_cores.blank? ? 20 : num_cores.to_i
+  #gpu = num_gpus.blank? ? 1 : num_gpus.to_i
+  walltime = (bc_num_hours.to_i * 60)
+  
+  qos_name = qos_name.blank? ? "normal" : qos_name
+ 
+#  if slurm_partition.include?("gpu")
+ #    node_type = "GPU"
+ # else
+     node_type = "CPU"
+#  end
+  
+  case node_type
+  when "GPU"
+  #  slurm_args = [ "--nodes", "#{num_cpu}", "--ntasks", "#{ppn}", "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--nodelist", "n0024.abc0,n0025.abc0,n0026.abc0,n0027.abc0", "--gres", "gpu:4"]
+  
+    slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:titan:1", "--nodelist", "n0024.abc0,n0025.abc0,n0026.abc0,n0027.abc0" ]
+  
+  when "CPU"
+     slurm_args = [ "--partition", "#{slurm_partition}", "--qos", "#{qos_name}", "--time", "#{walltime}", "--account", "#{slurm_account}", "--job-name", "#{job_name}", "--account", "scs",  "--exclude", "n0024.abc0,n0025.abc0,n0026.abc0,n0027.abc0" ]
+    
+  end
+%>
+---
+batch_connect:
+  template: vnc
+script:
+  native:
+  <%- slurm_args.each do |arg| %>
+    - "<%= arg %>"
+  <%- end %>
+

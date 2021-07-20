@@ -1,8 +1,8 @@
 <%-
   case num_cpu
   when "1"
-    ppn = 1
-    memory = 20000
+    ppn = num_cores
+    memory = num_cores.to_i * 20000 
   else
     ppn = num_cpu.to_i * 24
     memory = 500000

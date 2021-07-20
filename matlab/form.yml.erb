@@ -13,7 +13,7 @@ form:
   - bc_num_hours
   - num_cpu
   - bc_vnc_resolution
-#  - num_cores
+  - num_cores
 #  - bc_email_on_started
 
 attributes:
@@ -68,13 +68,13 @@ attributes:
     id: 'num_hours'
 
  
-#  num_cores:
-#    widget: "number_field"
-#    label: "Specify number of cores if using ONE node "
-#    value: 1
-#    min: 0
-#    max: 48
-#    step: 1
-#    id: 'num_cores'
+  num_cores:
+    widget: "number_field"
+    label: "Specify number of cores if use ONE node "
+    value: 1
+    min: 0
+    max: 24
+    step: 1
+    id: 'num_cores'
 
 

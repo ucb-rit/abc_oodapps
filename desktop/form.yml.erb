@@ -10,7 +10,7 @@ form:
   - slurm_account
   - qos_name
   - bc_num_hours
-#  - bc_num_slots
+  - num_cores
   - node_type
   - bc_vnc_resolution
 #  - raw_data
@@ -40,6 +40,13 @@ attributes:
     value: 1
     min: 1
     max: 144
+
+ num_cores:
+    widget: "number_field"
+    label: "Specify number of cores "
+    value: 1
+    min: 1
+    max: 24
     step: 1
-    id: 'num_hours'
+    id: 'num_cores'
 

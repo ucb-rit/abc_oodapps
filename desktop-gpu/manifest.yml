@@ -1,5 +1,5 @@
 ---
-name: Desktop
+name: Desktop-GPU+CPU
 icon: fa://desktop
 category: Interactive Apps
 subcategory: Desktops

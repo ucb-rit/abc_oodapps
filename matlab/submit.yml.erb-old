@@ -1,0 +1,34 @@
+<%-
+  case num_cpu
+  when "1"
+    ppn = num_cores
+    memory = num_cores.to_i * 20000 
+  else
+    ppn = num_cpu.to_i * 24
+    memory = 500000
+  end
+
+#  ppn = num_cpu ? 1 : num_cores.to_i
+  #gpu = num_gpus.blank? ? 1 : num_gpus.to_i
+  walltime = (bc_num_hours.to_i * 60)
+  
+#  qos_name = qos_name.blank? ? "normal" : qos_name
+ 
+  case node_type
+  when "GPU"
+  
+     slurm_args = [ "--nodes", "#{num_cpu}","--ntasks", "#{ppn}", "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:titan:1", "--nodelist", "n0026.abc0"]
+  
+  when "CPU"
+     slurm_args = [ "--nodes", "#{num_cpu}", "--ntasks", "#{ppn}", "--mem", "#{memory}", "--partition", "#{slurm_partition}", "--time", "#{walltime}", "--qos", "#{qos_name}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--exclude", "n0025.abc0,n0025.abc0,n0026.abc0,n0027.abc0" ]
+    
+  end
+%>
+---
+batch_connect:
+  template: vnc
+script:
+  native:
+  <%- slurm_args.each do |arg| %>
+    - "<%= arg %>"
+  <%- end %>

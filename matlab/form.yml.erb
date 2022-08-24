@@ -1,24 +1,43 @@
+<%-
+  cmd = "/usr/bin/sacctmgr show associations user=$USER -P -n format=partition,account,qos"
+  begin
+    output, status = Open3.capture2e(cmd)
+    if status.success?
+      raw_data = output
+    else
+      raise output
+    end
+  rescue => e
+    qos = []
+    qerror = e.message.strip
+  end
+-%>
+
 ---
 cluster:
   - "abc"
 #cacheable: "false"
 
 form:
+#  - num_cpu
+
   - job_name
   - versions
   - slurm_partition
   - slurm_account
   - qos_name
-  - node_type
   - bc_num_hours
-  - num_cpu
-  - bc_vnc_resolution
+  - node_type
+  - num_gpus
   - num_cores
-#  - bc_email_on_started
+ # - bc_vnc_resolution
+  - raw_data
+  - bc_email_on_started
 
 attributes:
- # node_type: "GPU"  
- # node_type: "CPU"
+  slurm_partition: "abc"
+  slurm_account: "co_abc"
+  qos_name: "abc_normal"
 
   job_name:
     label: "Name of the job"
@@ -29,6 +48,7 @@ attributes:
     label: "MATLAB Versions"
     help: "This defines the version of MATLAB to load."
     options:
+      - [ "R2022a", "matlab/r2022a" ]
       - [ "R2021a", "matlab/r2021a" ]
       - [ "R2020b", "matlab/r2020b" ]
       - [ "R2020a", "matlab/r2020a" ]
@@ -36,27 +56,18 @@ attributes:
       - [ "R2017b", "matlab/r2017b" ]
       - [ "R2016b", "matlab/r2016b" ]
      
-  node_type:
+  node_type: 
     widget: select
-    label: "Node type"  
-    options: 
-     - "CPU"
-#     - "GPU"
+    lable: "Please choose CPU or GPU"
+    help: "This defines where to launch desktop."
+    options:
+      - [ "CPU", "CPU" ]
+      - [ "GPU:Titan", "TITAN" ]
+      - [ "GPU:A100", "A100" ]
 
   bc_vnc_resolution:
      required: true
-  
-  slurm_partition: "abc"
-  slurm_account: "co_abc"
-  qos_name: "abc_normal"
  
-  num_cpu:
-    label: "Number of CPU Nodes"
-    help: "Please specify number of CPU nodes"
-    value: 1
-    max: 10
-    step: 1
-
   bc_num_hours:
     widget: "number_field"
     label: "Wall Clock Time"
@@ -67,14 +78,26 @@ attributes:
     step: 1
     id: 'num_hours'
 
- 
   num_cores:
     widget: "number_field"
-    label: "Specify number of cores if use ONE node "
+    label: "Specify number of CPU cores with CPU launch only"
     value: 1
-    min: 0
+    min: 1
     max: 24
     step: 1
     id: 'num_cores'
 
+  num_gpus:
+    widget: "number_field"
+    label: "Specify number of GPUs with GPU launch: Max(A100)=3, Max(Titan)=4"
+    value: 1
+    min: 1
+    max: 4
+    step: 1
+    id: 'num_gpus'
+ 
+  raw_data:
+    label: "Account associations for use by JavaScript"
+    widget: hidden_field
+    value: "<%= raw_data %>"
 

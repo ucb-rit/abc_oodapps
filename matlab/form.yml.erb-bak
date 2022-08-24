@@ -1,18 +1,3 @@
-<%-
-  cmd = "/usr/bin/sacctmgr show associations user=$USER -P -n format=partition,account,qos"
-  begin
-    output, status = Open3.capture2e(cmd)
-    if status.success?
-      raw_data = output
-    else
-      raise output
-    end
-  rescue => e
-    qos = []
-    qerror = e.message.strip
-  end
--%>
-
 ---
 cluster:
   - "abc"
@@ -28,15 +13,12 @@ form:
   - bc_num_hours
   - num_cpu
   - bc_vnc_resolution
-  - num_cores
-  - num_gpus
-  - raw_data
-  - bc_email_on_started
+#  - num_cores
+#  - bc_email_on_started
 
 attributes:
-  slurm_partition: "abc"
-  slurm_account: "co_abc"
-  qos_name: "abc_normal"
+ # node_type: "GPU"  
+ # node_type: "CPU"
 
   job_name:
     label: "Name of the job"
@@ -54,22 +36,19 @@ attributes:
       - [ "R2017b", "matlab/r2017b" ]
       - [ "R2016b", "matlab/r2016b" ]
      
-  slurm_partition: 
-    widget: select 
-    label: "SLURM Partition"
-    help: "Choose the name of the SLURM Partition in which you want to launch this MatLab Server"
-    required: true
-
-  
   node_type:
     widget: select
     label: "Node type"  
     options: 
      - "CPU"
-     - "GPU"
+#     - "GPU"
 
   bc_vnc_resolution:
-    required: true
+     required: true
+  
+  slurm_partition: "abc"
+  slurm_account: "co_abc"
+  qos_name: "abc_normal"
  
   num_cpu:
     label: "Number of CPU Nodes"
@@ -89,25 +68,13 @@ attributes:
     id: 'num_hours'
 
  
-  num_cores:
-    widget: "number_field"
-    label: "Number of cores"
-    value: 1
-    min: 0
-    max: 48
-    step: 1
-    id: 'num_cores'
+#  num_cores:
+#    widget: "number_field"
+#    label: "Specify number of cores if using ONE node "
+#    value: 1
+#    min: 0
+#    max: 48
+#    step: 1
+#    id: 'num_cores'
 
-  num_gpus:
-    widget: "number_field"
-    label: "Number of GPU cards if GPU is requested"
-    value: 1
-    min: 0
-    max: 3
-    step: 1
-    id: 'num_gpus'
 
-  raw_data:
-    label: "Account associations for use by JavaScript"
-    widget: hidden_field
-    value: "<%= raw_data %>"

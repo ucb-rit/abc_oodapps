@@ -10,8 +10,9 @@ form:
   - slurm_account
   - qos_name
   - bc_num_hours
-  - num_cores
   - node_type
+  - num_gpus
+  - num_cores
   - bc_vnc_resolution
 #  - raw_data
 
@@ -23,7 +24,14 @@ attributes:
  bc_vnc_resolution:
     required: true
 
- node_type: "CPU"
+ node_type: 
+    widget: select
+    lable: "Please choose CPU or GPU"
+    help: "This defines where to launch desktop."
+    options:
+      - [ "CPU", "CPU" ]
+      - [ "GPU:Titan", "TITAN" ]
+      - [ "GPU:A100", "A100" ]
 
  job_name:
     label: "Name of the job"
@@ -43,10 +51,18 @@ attributes:
 
  num_cores:
     widget: "number_field"
-    label: "Specify number of cores "
+    label: "Specify number of cores with CPU launch only"
     value: 1
     min: 1
     max: 24
     step: 1
     id: 'num_cores'
 
+ num_gpus:
+    widget: "number_field"
+    label: "Specify number of GPUs with GPU launch: Max(A100)=3, Max(Titan)=4"
+    value: 1
+    min: 1
+    max: 4
+    step: 1
+    id: 'num_gpus'

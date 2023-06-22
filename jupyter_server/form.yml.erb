@@ -1,0 +1,89 @@
+# Batch Connect app configuration file
+#
+# @note Used to define the submitted cluster, title, description, and
+#   hard-coded/user-defined attributes that make up this Batch Connect app.
+<%-
+  cmd = "/usr/bin/sacctmgr show associations user=$USER -P partition=abc_a100,abc -n format=partition,account,qos"
+  begin
+    output, status = Open3.capture2e(cmd)
+    if status.success?
+      raw_data = output
+    else
+      raise output
+    end
+  rescue => e
+    qos = []
+    qerror = e.message.strip
+  end
+-%>
+
+---
+
+cluster: "abc"
+
+form:
+  - modules
+  - extra_jupyter_args
+  - job_name
+  - slurm_partition
+  - slurm_account
+  - qos_name
+  - bc_num_hours
+  - node_type
+  - num_cores
+  - num_gpus
+#  - bc_vnc_resolution
+  - raw_data
+
+attributes:
+  modules: "python/3.7"
+  extra_jupyter_args: '--notebook-dir=/ --NotebookApp.default_url=/tree/global/home/users/"${USER}"'
+
+  node_type:
+    widget: select
+    lable: "Please choose CPU or GPU"
+    help: "This defines where to launch desktop."
+    options:
+      - [ "CPU", "CPU" ]
+      - [ "GPU:Titan", "TITAN" ]
+      - [ "GPU:A100", "A100" ]
+
+  job_name:
+    label: "Name of the job"
+    value: "notebook_"
+
+  slurm_partition: "abc"
+  slurm_account: "co_abc"
+  qos_name: "abc_normal"
+
+  bc_num_hours:
+    widget: "number_field"
+    label: "Wall Clock Time"
+    help: "How many hours do you want to run Jupyter notebook?"
+    value: 1
+    min: 1
+
+  num_cores:
+    widget: "number_field"
+    label: "Specify number of CPU cores with CPU launch only"
+    value: 1
+    min: 1
+    max: 24
+    step: 1
+    id: 'num_cores'
+
+  num_gpus:
+    widget: "number_field"
+    label: "Specify number of GPUs with GPU launch: Max(A100)=3, Max(Titan)=4"
+    value: 1
+    min: 1
+    max: 4
+    step: 1
+    id: 'num_gpus'
+
+  raw_data:
+    label: "Account associations for use by JavaScript"
+    widget: hidden_field
+    value: "<%= raw_data %>"
+    cacheable: false
+

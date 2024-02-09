@@ -32,6 +32,7 @@ attributes:
       - [ "CPU", "CPU" ]
       - [ "GPU:Titan", "TITAN" ]
       - [ "GPU:A100", "A100" ]
+      - [ "GPU:A6000", "A6000"]
 
  job_name:
     label: "Name of the job"
@@ -51,7 +52,7 @@ attributes:
 
  num_cores:
     widget: "number_field"
-    label: "Specify number of cores with CPU launch only"
+    label: "Specify number of cores (CPU launch only)"
     value: 1
     min: 1
     max: 24
@@ -60,7 +61,7 @@ attributes:
 
  num_gpus:
     widget: "number_field"
-    label: "Specify number of GPUs with GPU launch: Max(A100)=3, Max(Titan)=4"
+    label: "Specify number of GPUs with GPU launch: Max(A6000)=3, Max(A100)=4, Max(Titan)=4"
     value: 1
     min: 1
     max: 4

@@ -30,9 +30,8 @@ form:
   - qos_name
   - bc_num_hours
   - node_type
-  - num_cores
   - num_gpus
-#  - bc_vnc_resolution
+  - num_cores
   - raw_data
 
 attributes:
@@ -47,6 +46,7 @@ attributes:
       - [ "CPU", "CPU" ]
       - [ "GPU:Titan", "TITAN" ]
       - [ "GPU:A100", "A100" ]
+      - [ "GPU:A6000", "A6000"]
 
   job_name:
     label: "Name of the job"
@@ -65,7 +65,7 @@ attributes:
 
   num_cores:
     widget: "number_field"
-    label: "Specify number of CPU cores with CPU launch only"
+    label: "CPU only: Specify number of CPU cores"
     value: 1
     min: 1
     max: 24
@@ -74,7 +74,7 @@ attributes:
 
   num_gpus:
     widget: "number_field"
-    label: "Specify number of GPUs with GPU launch: Max(A100)=3, Max(Titan)=4"
+    label: "GPU only: Specify number of GPUs with GPU launch: Max(A6000)=3, Max(A100)=4, Max(Titan)=4"
     value: 1
     min: 1
     max: 4

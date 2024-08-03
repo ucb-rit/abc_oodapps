@@ -23,7 +23,7 @@ cluster: "abc"
 
 form:
   - modules
-  - extra_jupyter_args
+  - extra_jupyterlab_args
   - job_name
   - slurm_partition
   - slurm_account
@@ -35,8 +35,8 @@ form:
   - raw_data
 
 attributes:
-  modules: "python/3.7"
-  extra_jupyter_args: '--notebook-dir=/ --NotebookApp.default_url=/tree/global/home/users/"${USER}"'
+  modules: "anaconda3/2024.02-1-11.4"
+  extra_jupyterlab_args: '--notebook-dir=/ --NotebookApp.default_url=/global/home/users/"${USER}"'
 
   node_type:
     widget: select

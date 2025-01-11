@@ -11,8 +11,8 @@ form:
   - qos_name
   - bc_num_hours
   - node_type
-  - num_gpus
   - num_cores
+  - num_gpus
   - bc_vnc_resolution
 #  - raw_data
 
@@ -30,6 +30,7 @@ attributes:
     help: "This defines where to launch desktop."
     options:
       - [ "CPU", "CPU" ]
+      - [ "FIONA", "fiona" ]
       - [ "GPU:Titan", "TITAN" ]
       - [ "GPU:A100", "A100" ]
       - [ "GPU:A6000", "A6000"]
@@ -63,7 +64,7 @@ attributes:
     widget: "number_field"
     label: "Specify number of GPUs with GPU launch: Max(A6000)=3, Max(A100)=4, Max(Titan)=4"
     value: 1
-    min: 1
+    min: 0
     max: 4
     step: 1
     id: 'num_gpus'

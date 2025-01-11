@@ -27,6 +27,12 @@
      memory = (cores.to_i * 21000)
      slurm_args = [ "--nodes", "1", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--mem", "#{memory}", "--qos", "#{qos_name}", "--time", "#{walltime}", "--account", "#{slurm_account}", "--job-name", "#{job_name}",  "--exclude", "g000[0-2].abc[0]" ]
 
+  when "fiona"
+     slurm_partition = "fiona"
+     cores = num_cores.blank? ? 1 : num_cores.to_i
+     memory = (cores.to_i * 15000)
+     slurm_args = [ "--nodes", "1", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--mem", "#{memory}", "--qos", "fiona", "--time", "#{walltime}", "--account", "#{slurm_account}", "--job-name", "#{job_name}" ]
+
   end
 %>
 ---

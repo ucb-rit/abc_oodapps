@@ -17,7 +17,7 @@
 
   when "A6000"
     slurm_partition = "a6000"
-    cores = (10 * gpu)
+    cores = (8 * gpu)
     memory = (cores.to_i * 32100)
     slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--qos", "#{qos_name}", "--mem", "#{memory}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:a6000:#{gpu}" ]  
 

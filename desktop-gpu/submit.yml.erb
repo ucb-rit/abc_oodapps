@@ -11,7 +11,7 @@
 
   when "A100"
     slurm_partition = "abc_a100"
-    cores = (5 * gpu)
+    cores = (4 * gpu)
     memory = (cores.to_i * 25000)
     slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--qos", "#{qos_name}", "--mem", "#{memory}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:a100:#{gpu}" ]
 

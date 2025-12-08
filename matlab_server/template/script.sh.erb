@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Clean the environment
+module purge
+
+# Set working directory to home directory
+cd "${HOME}"
+
+source /global/home/groups/software/rocky-8.x86_64/modules/matlab-proxy/bin/activate
+#
+# Start MATLAB
+#
+
+# Load the required environment
+module load <%= context.versions %> 
+
+
+# Launch MATLAB
+module list
+set -x
+env MWI_APP_HOST="0.0.0.0" \
+    MWI_APP_PORT="$port" \
+    MWI_ENABLE_TOKEN_AUTH="True" \
+    MWI_AUTH_TOKEN="$password" \
+    MWI_USE_EXISTING_LICENSE="True" \
+    matlab-proxy-app
+

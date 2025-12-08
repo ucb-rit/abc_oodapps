@@ -1,0 +1,106 @@
+<%-
+  cmd = "/usr/bin/sacctmgr show associations user=$USER -P -n format=partition,account,qos"
+  begin
+    output, status = Open3.capture2e(cmd)
+    if status.success?
+      raw_data = output
+    else
+      raise output
+    end
+  rescue => e
+    qos = []
+    qerror = e.message.strip
+  end
+-%>
+
+---
+cluster:
+  - "abc"
+#cacheable: "false"
+
+form:
+#  - num_cpu
+  - job_name
+  - versions
+  - slurm_partition
+  - slurm_account
+  - qos_name
+  - bc_num_hours
+  - node_type
+  - num_gpus
+  - num_cores
+ # - bc_vnc_resolution
+  - raw_data
+  - bc_email_on_started
+
+attributes:
+  slurm_partition: "abc"
+  slurm_account: "co_abc"
+  qos_name:
+    widget: select
+    label: "Choose your QoS"
+    help: "Max Wall Clock Time is 48 hours for abc_normal and 1 hour for abc_debug. To run a session for more than 48 hours, choose abc_high if you have access to that qos"
+    options:
+      - [ "abc_normal", "abc_normal" ]
+      - [ "abc_high", "abc_high" ]
+      - [ "abc_debug", "abc_debug" ]
+
+  job_name:
+    label: "Name of the job"
+    value: "OOD_MatLab_"
+
+  versions:
+    widget: select
+    label: "MATLAB Versions"
+    help: "This defines the version of MATLAB to load."
+    options:
+      - [ "R2024b", "matlab/r2024b" ]
+      - [ "R2024a", "matlab/r2024a" ]
+      - [ "R2023a", "matlab/r2023a" ]
+      - [ "R2022a", "matlab/r2022a" ]
+     
+  node_type: 
+    widget: select
+    lable: "Please choose CPU or GPU"
+    help: "This defines where to launch desktop."
+    options:
+      - [ "CPU", "CPU" ]
+      - [ "GPU:Titan", "TITAN" ]
+      - [ "GPU:A100", "A100" ]
+      - [ "GPU:A6000", "A6000"]
+
+  bc_vnc_resolution:
+     required: true
+ 
+  bc_num_hours:
+    widget: "number_field"
+    label: "Wall Clock Time"
+    help: "How many hours do you want to run this MatLab?"
+    value: 1
+    min: 1
+    step: 1
+    id: 'num_hours'
+
+  num_cores:
+    widget: "number_field"
+    label: "CPU only: Specify number of CPU cores"
+    value: 1
+    min: 1
+    max: 24
+    step: 1
+    id: 'num_cores'
+
+  num_gpus:
+    widget: "number_field"
+    label: "GPU only: Specify number of GPUs with GPU launch: Max(A6000)=4, Max(A100)=4, Max(Titan)=4"    
+    value: 1
+    min: 1
+    max: 4
+    step: 1
+    id: 'num_gpus'
+ 
+  raw_data:
+    label: "Account associations for use by JavaScript"
+    widget: hidden_field
+    value: "<%= raw_data %>"
+

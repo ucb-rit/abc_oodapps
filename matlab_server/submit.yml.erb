@@ -1,0 +1,39 @@
+<%-
+  gpu = num_gpus.blank? ? 1 : num_gpus.to_i
+  walltime = (bc_num_hours.to_i * 60)
+  
+  case node_type
+  when "TITAN"
+    slurm_partition = "abc"
+    cores = (5 * gpu)
+    memory = (cores.to_i * 25600)
+    slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--qos", "#{qos_name}", "--mem", "#{memory}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:titan:#{gpu}",  "--exclude", "n0[000-023].abc[0]" ] 
+
+  when "A100"
+    slurm_partition = "abc_a100"
+    cores = (5 * gpu)
+    memory = (cores.to_i * 25000)
+    slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--qos", "#{qos_name}", "--mem", "#{memory}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:a100:#{gpu}" ]
+
+  when "A6000"
+    slurm_partition = "a6000"
+    cores = (8 * gpu)
+    memory = (cores.to_i * 32100)
+    slurm_args = [ "--time", "#{walltime}", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--qos", "#{qos_name}", "--mem", "#{memory}", "--job-name", "#{job_name}", "--account", "#{slurm_account}", "--gres", "gpu:a6000:#{gpu}" ]  
+
+  when "CPU"
+     slurm_partition = "abc"
+     cores = num_cores.blank? ? 1 : num_cores.to_i
+     memory = (cores.to_i * 21000)
+     slurm_args = [ "--nodes", "1", "--partition", "#{slurm_partition}", "--ntasks", "#{cores}", "--mem", "#{memory}", "--qos", "#{qos_name}", "--time", "#{walltime}", "--account", "#{slurm_account}", "--job-name", "#{job_name}",  "--exclude", "g000[0-2].abc[0]" ]
+
+  end
+%>
+---
+batch_connect:
+  template: basic
+script:
+  native:
+  <%- slurm_args.each do |arg| %>
+    - "<%= arg %>"
+  <%- end %>

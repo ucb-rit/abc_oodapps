@@ -1,6 +1,6 @@
 echo "$(date): Waiting for server to open port ${port}..."
 
-if wait_until_port_used "${host}:${port}" 120; then
+if wait_until_port_used "${host}:${port}" 240; then
   echo "$(date): Discovered server listening on port ${port}!"
 else
   echo "$(date): Timed out waiting for server to open port ${port}!"

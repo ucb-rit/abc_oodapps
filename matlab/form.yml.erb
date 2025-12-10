@@ -36,7 +36,14 @@ form:
 attributes:
   slurm_partition: "abc"
   slurm_account: "co_abc"
-  qos_name: "abc_normal"
+  qos_name:
+    widget: select
+    label: "Choose your QoS"
+    help: "Max Wall Clock Time is 48 hours for abc_normal and 1 hour for abc_debug. To run a session for more than 48 hours, choose abc_high if you have access to that qos"
+    options:
+      - [ "abc_normal", "abc_normal" ]
+      - [ "abc_high", "abc_high" ]
+      - [ "abc_debug", "abc_debug" ]
 
   job_name:
     label: "Name of the job"
@@ -47,6 +54,7 @@ attributes:
     label: "MATLAB Versions"
     help: "This defines the version of MATLAB to load."
     options:
+      - [ "R2025b", "matlab/r2025b" ]
       - [ "R2024b", "matlab/r2024b" ]
       - [ "R2024a", "matlab/r2024a" ]
       - [ "R2023a", "matlab/r2023a" ]
